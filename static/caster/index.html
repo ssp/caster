@@ -10,19 +10,61 @@
             const escapedURLToRequest = escape(URLToRequest);
             request.open('GET', `/cast/Wohnzimmer?url=${escapedURLToRequest}`);
             request.addEventListener('load', function(event) {
-                if (request.status >= 200 && request.status < 300) {
-                    console.log(request.responseText);
-                } else {
-                    console.warn(request.statusText, request.responseText);
-                }
+                console.info(`returned with status ${request.status}`);
             });
+            updateHistory(URLToRequest);
             request.send();
         }
+
+        function updateHistory(URL) {
+            const history = JSON.parse(localStorage['history'] || '[]');
+            let newHistory = history.filter(entry => entry.url !== URL);
+            newHistory.unshift({url: URL});
+            newHistory = newHistory.slice(0, 25);
+            localStorage['history'] = JSON.stringify(newHistory);
+            displayHistory();
+        }
+
+        function displayHistory() {
+            const list = document.getElementById('history');
+            while (list.lastChild) {
+                list.lastChild.remove();
+            }
+
+            const history = JSON.parse(localStorage['history'] || '[]');
+            history.forEach(entry => list.appendChild(createListEntry(entry.url)));
+        }
+
+        function createListEntry(URL) {
+            const content = document.createTextNode(URL);
+            const link = document.createElement('a');
+            link.appendChild(content);
+            link.setAttribute('href', '#');
+            link.onclick = () => clickListEntry(URL);
+            const item = document.createElement('li');
+            item.appendChild(link);
+            return item;
+        }
+
+        function clickListEntry(URL) {
+            document.getElementById('url').value = URL;
+            castURL();
+        }
     </script>
-    <body>
+    <body onload="displayHistory()">
         <h1>Caster</h1>
-        <label for="url">URL</label>
-        <input type="text" id="url" name="url"/>
-        <input type="submit" onclick="castURL()" value="Cast">
+        <p>
+            Enter URL to display on Chromecast »Wohnzimmer«.
+        </p>
+        <div>
+            <textarea type="text" id="url" name="url"></textarea>
+        </div>
+        <div>
+            <input type="submit" onclick="castURL()" value="Cast">
+        </div>
+
+        <h2>History</h2>
+        <ul id="history">
+        </ul>
     </body>
 </html>
