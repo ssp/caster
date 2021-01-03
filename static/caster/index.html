@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Caster</title>
+    </head>
+    <script>
+        function castURL() {
+            const request = new XMLHttpRequest();
+            const URLToRequest = document.getElementById('url').value;
+            const escapedURLToRequest = escape(URLToRequest);
+            request.open('GET', `/cast/Wohnzimmer?url=${escapedURLToRequest}`);
+            request.addEventListener('load', function(event) {
+                if (request.status >= 200 && request.status < 300) {
+                    console.log(request.responseText);
+                } else {
+                    console.warn(request.statusText, request.responseText);
+                }
+            });
+            request.send();
+        }
+    </script>
+    <body>
+        <h1>Caster</h1>
+        <label for="url">URL</label>
+        <input type="text" id="url" name="url"/>
+        <input type="submit" onclick="castURL()" value="Cast">
+    </body>
+</html>

@@ -32,6 +32,8 @@ app.get('/cast/:chromecastName', (request, res) => {
     res.send(`showing URL »${URLStringToCast}« on »${chromecastName}«`)
 })
 
+app.use(express.static('static'))
+
 app.listen(port, () => {
     console.log(`Caster app listening at http://localhost:${port}`)
 })
