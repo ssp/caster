@@ -1,0 +1,11 @@
+{
+  "name": "caster",
+  "version": "1.0.0",
+  "description": "Triggers go-cast",
+  "main": "index.js",
+  "author": "Sven-S. Porst <ssp-web@earthlingsoft.net>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
