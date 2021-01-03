@@ -17,11 +17,11 @@
         }
 
         function updateHistory(URL) {
-            const history = JSON.parse(localStorage['history'] || '[]');
+            const history = getHistory();
             let newHistory = history.filter(entry => entry.url !== URL);
             newHistory.unshift({url: URL});
             newHistory = newHistory.slice(0, 25);
-            localStorage['history'] = JSON.stringify(newHistory);
+            setHistory(newHistory);
             displayHistory();
         }
 
@@ -31,24 +31,47 @@
                 list.lastChild.remove();
             }
 
-            const history = JSON.parse(localStorage['history'] || '[]');
+            const history = getHistory();
             history.forEach(entry => list.appendChild(createListEntry(entry.url)));
         }
 
         function createListEntry(URL) {
-            const content = document.createTextNode(URL);
             const link = document.createElement('a');
-            link.appendChild(content);
+            link.appendChild(document.createTextNode(URL));
             link.setAttribute('href', '#');
-            link.onclick = () => clickListEntry(URL);
+            link.onclick = () => clickHistoryEntry(URL);
+
+            const deleteLink = document.createElement('a');
+            deleteLink.appendChild(document.createTextNode('[x]'));
+            deleteLink.setAttribute('href', '#');
+            deleteLink.onclick = () => deleteHistoryEntry(URL);
+
             const item = document.createElement('li');
             item.appendChild(link);
+            item.appendChild(document.createTextNode(' '));
+            item.appendChild(deleteLink);
+
             return item;
         }
 
-        function clickListEntry(URL) {
+        function clickHistoryEntry(URL) {
             document.getElementById('url').value = URL;
             castURL();
+        }
+
+        function deleteHistoryEntry(URL) {
+            const history = getHistory();
+            const newHistory = history.filter(entry => entry.url !== URL);
+            setHistory(newHistory);
+            displayHistory();
+        }
+
+        function getHistory() {
+            return JSON.parse(localStorage['history'] || '[]');
+        }
+
+        function setHistory(newHistory) {
+            localStorage['history'] = JSON.stringify(newHistory);
         }
     </script>
     <body onload="displayHistory()">
