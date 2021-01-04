@@ -40,6 +40,13 @@
         }
     </style>
     <script>
+        function handleKeyPress(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                castURL();
+            }
+        }
+
         function castURL() {
             const request = new XMLHttpRequest();
             const URLToRequest = document.getElementById('url').value;
@@ -117,7 +124,7 @@
             Enter URL to display on Chromecast »Wohnzimmer«.
         </p>
         <div>
-            <textarea type="text" id="url" name="url"></textarea>
+            <textarea type="text" id="url" name="url" onkeypress="handleKeyPress(event)"></textarea>
         </div>
         <div>
             <input type="submit" onclick="castURL()" value="Cast">
