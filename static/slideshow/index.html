@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Slideshow</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                border: 0 none;
+            }
+            iframe {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: none;
+            }
+            iframe.visible {
+                display: block;
+            }
+        </style>
+        <script>
+            function loaded() {
+                const URLs = new URLSearchParams(window.location.search).getAll('url');
+                const iframes = URLs.map(createIframeWithURL);
+
+                const container = document.getElementById('container');
+                iframes.forEach(iframe => container.appendChild(iframe));
+
+                if (iframes.length > 0) {
+                    iframes[0].classList.add('visible');
+                    setInterval(showNextIframe(iframes), 30000);
+                }
+            }
+
+            function createIframeWithURL(URL) {
+                const iframe = document.createElement('iframe');
+                iframe.setAttribute('width', window.innerWidth);
+                iframe.setAttribute('height', window.innerHeight);
+                iframe.setAttribute('src', URL);
+                return iframe;
+            }
+
+            function showNextIframe(iframes) {
+                return () => {
+                    const currentIndex = iframes.findIndex(iframe => iframe.classList.contains('visible'));
+                    const nextIndex = (currentIndex + 1) % iframes.length;
+                    iframes[currentIndex]?.classList?.remove('visible');
+                    iframes[nextIndex].classList.add('visible');
+                }
+            }
+        </script>
+    </head>
+    <body id="container" onload="loaded()">
+    </body>
+</html>
