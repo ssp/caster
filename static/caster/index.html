@@ -15,18 +15,19 @@
             text-decoration: none;
             color: #339;
         }
-        div, h1, p, h2 {
-            text-align: center;
-        }
         textarea {
             width: 100%;
+            margin: 0 -2px;
+            padding: 2px;
         }
         h2 {
-            margin-top: 2em;
+            margin-top: 1em;
+            font-size: 1em;
         }
         ul#history {
             list-style: none;
             padding: 0 2em 0 0;
+            overflow: hidden;
         }
         #history li {
             position: relative;
@@ -119,10 +120,9 @@
         }
     </script>
     <body onload="displayHistory()">
-        <h1>Caster</h1>
-        <p>
+        <label for="url">
             Enter URL to display on Chromecast »Wohnzimmer«.
-        </p>
+        </label>
         <div>
             <textarea type="text" id="url" name="url" onkeypress="handleKeyPress(event)"></textarea>
         </div>
