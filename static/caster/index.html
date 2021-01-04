@@ -15,6 +15,10 @@
             text-decoration: none;
             color: #339;
         }
+        label {
+            display: block;
+            margin-bottom: .33em;
+        }
         textarea {
             width: 100%;
             margin: 0 -2px;
@@ -41,7 +45,19 @@
         }
     </style>
     <script>
-        function handleKeyPress(event) {
+        function init() {
+            if (!localStorage['chromecastName']) {
+                localStorage['chromecastName'] = 'Wohnzimmer';
+            }
+            document.getElementById('chromecastName').value = localStorage['chromecastName'];
+            displayHistory();
+        }
+
+        function handleChromecastNameBlur(event) {
+            localStorage['chromecastName'] = event.target.value;
+        }
+
+        function handleURLKeyPress(event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
                 castURL();
@@ -49,10 +65,12 @@
         }
 
         function castURL() {
+            document.getElementById('chromecastName').blur();
+            const chromecastName = encodeURIComponent(localStorage['chromecastName']);
             const request = new XMLHttpRequest();
             const URLToRequest = document.getElementById('url').value;
-            const escapedURLToRequest = escape(URLToRequest);
-            request.open('GET', `/cast/Wohnzimmer?url=${escapedURLToRequest}`);
+            const escapedURLToRequest = encodeURIComponent(URLToRequest);
+            request.open('GET', `/cast/${chromecastName}?url=${escapedURLToRequest}`);
             request.addEventListener('load', function(event) {
                 console.info(`returned with status ${request.status}`);
             });
@@ -119,12 +137,13 @@
             localStorage['history'] = JSON.stringify(newHistory);
         }
     </script>
-    <body onload="displayHistory()">
+    <body onload="init()">
         <label for="url">
-            Enter URL to display on Chromecast »Wohnzimmer«.
+            Enter URL to display on Chromecast
+            <input type="text" id="chromecastName" onblur="handleChromecastNameBlur(event)"/>.
         </label>
         <div>
-            <textarea type="text" id="url" name="url" onkeypress="handleKeyPress(event)"></textarea>
+            <textarea type="text" id="url" name="url" onkeypress="handleURLKeyPress(event)"></textarea>
         </div>
         <div>
             <input type="submit" onclick="castURL()" value="Cast">
