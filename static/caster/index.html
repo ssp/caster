@@ -2,7 +2,43 @@
 <html>
     <head>
         <title>Caster</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     </head>
+    <style>
+        body {
+            background: #eee;
+            max-width: 50em;
+            margin: auto;
+            padding: 1em;
+        }
+        a, a:visited {
+            text-decoration: none;
+            color: #339;
+        }
+        div, h1, p, h2 {
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+        }
+        h2 {
+            margin-top: 2em;
+        }
+        ul#history {
+            list-style: none;
+            padding: 0 2em 0 0;
+        }
+        #history li {
+            position: relative;
+            margin-bottom: 0.5em;
+        }
+        #history li .delete {
+            position: absolute;
+            right: 0;
+            top: 0;
+            color: #900;
+        }
+    </style>
     <script>
         function castURL() {
             const request = new XMLHttpRequest();
@@ -44,6 +80,7 @@
             const deleteLink = document.createElement('a');
             deleteLink.appendChild(document.createTextNode('[x]'));
             deleteLink.setAttribute('href', '#');
+            deleteLink.setAttribute('class', 'delete');
             deleteLink.onclick = () => deleteHistoryEntry(URL);
 
             const item = document.createElement('li');
