@@ -22,7 +22,8 @@
         </style>
         <script>
             function loaded() {
-                const URLs = new URLSearchParams(window.location.search).getAll('url');
+                const params = new URLSearchParams(window.location.search);
+                const URLs = params.getAll('url');
                 const iframes = URLs.map(createIframeWithURL);
 
                 const container = document.getElementById('container');
@@ -30,7 +31,12 @@
 
                 if (iframes.length > 0) {
                     iframes[0].classList.add('visible');
-                    setInterval(showNextIframe(iframes), 30000);
+                    const interval = (params.get('interval') || 30) * 1000;
+                    setInterval(showNextIframe(iframes), interval);
+                } else {
+                    document
+                        .getElementById('container')
+                        .appendChild(document.createTextNode('Add URLs of pages to cycle through in »url« parameters.'))
                 }
             }
 
