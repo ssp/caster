@@ -1,11 +1,18 @@
 const express = require('express')
 const { spawnSync } = require('child_process')
 const url = require('url');
+const fs = require('fs');
+const { exit, env } = require('process');
 
-const castPath = '/Users/ssp/bin/cast'
+const goCastPath = env.CASTER_GO_CAST_PATH
+if(!fs.existsSync(goCastPath)) {
+    console.error(`go-cast binary not found. Find the binary at https://github.com/barnybug/go-cast/releases/ and set the path to it in CASTER_GO_CAST_PATH.`)
+    exit(1)
+}
+
+const port = env.CASTER_PORT || 10000
 
 const app = express()
-const port = 10000
 
 app.get('/cast/:chromecastName', (request, res) => {
     const URLStringToCast = request.query['url']
@@ -35,7 +42,7 @@ app.get('/cast/:chromecastName', (request, res) => {
 app.use(express.static(`${__dirname}/static`))
 
 app.listen(port, () => {
-    console.log(`Caster app listening at http://localhost:${port}`)
+    console.log(`Caster app listening at http://localhost:${port}. Set the port using the CASTER_PORT environment variable.`)
 })
 
 function validateURL(URLStringToCast) {
@@ -54,6 +61,6 @@ function validateURL(URLStringToCast) {
 function runCastCommand(chromecastName, commandParts) {
     const baseArguments = ['--name', chromecastName]
     const arguments = baseArguments.concat(commandParts)
-    const result = spawnSync(castPath, arguments)
+    const result = spawnSync(goCastPath, arguments)
     return result.status === 0
 }

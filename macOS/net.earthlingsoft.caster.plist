@@ -2,14 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Disabled</key>
+	<false/>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>CASTER_GO_CAST_PATH</key>
+		<string>/Users/ssp/bin/cast</string>
+		<key>CASTER_PORT</key>
+		<string>10000</string>
+	</dict>
 	<key>KeepAlive</key>
 	<true/>
 	<key>Label</key>
-	<string>local.job</string>
+	<string>Caster</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/usr/bin/env</string>
-		<string>node</string>
+		<string>/usr/local/bin/node</string>
 		<string>/Users/ssp/Developer/caster/index.js</string>
 	</array>
 	<key>RunAtLoad</key>
