@@ -6,6 +6,6 @@
   "author": "Sven-S. Porst <ssp-web@earthlingsoft.net>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "4.18.2"
   }
 }
